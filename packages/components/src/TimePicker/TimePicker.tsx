@@ -1,11 +1,27 @@
-import React, { ChangeEvent } from "react";
-import classnames from "classnames";
+import React, { useLayoutEffect } from "react";
 import { CivilTime } from "@std-proposal/temporal";
-import styles from "./TimePicker.css";
+// eslint-disable-next-line import/no-internal-modules
+// import supportsTime from "time-input-polyfill/supportsTime";
+// import TimePolyfill from "time-input-polyfill";
+import { FormField, FormFieldProps } from "../FormField";
 
-interface TimePickerProps {
+/**
+ * The following is the same as:
+ *   type BaseProps = Omit<FormFieldProps, "type" | "children">;
+ * Unfortunately Docz doesn't currently support Omit so it has been reduced to
+ * its component parts.
+ */
+type BaseProps = Pick<
+  FormFieldProps,
+  Exclude<
+    keyof FormFieldProps,
+    "type" | "children" | "rows" | "defaultValue" | "value" | "onChange"
+  >
+>;
+
+interface TimePickerProps extends BaseProps {
   /**
-   * Intial value.
+   * Initial value.
    *
    * defaultValue is for when you want to set an initial value of
    * an uncontrolled component, i.e a component that you won't be monitoring
@@ -17,11 +33,6 @@ interface TimePickerProps {
   readonly defaultValue?: CivilTime;
 
   /**
-   * Prevent the input from being changed.
-   */
-  readonly readOnly?: boolean;
-
-  /**
    * Set the component to the given value.
    * Must be used with onChange to create a "controlled component" or
    * set `readOnly` to silence the warning.
@@ -29,81 +40,57 @@ interface TimePickerProps {
   readonly value?: CivilTime;
 
   /**
-   * Indicates an error. Adds a red border.
-   * @default false
-   */
-  readonly invalid?: boolean;
-
-  /**
-   * Indicates the input is not changeable. Greys out the input.
-   * @default false
-   */
-  readonly disabled?: boolean;
-
-  /**
-   * Indicates the input is not changeable. Greys out the input.
-   */
-  readonly size?: "small" | "large";
-
-  /**
    * Function called when user changes input value.
    */
   onChange?(newValue: CivilTime): void;
 }
 
-function civilTimeToHTMLTime(ct: CivilTime) {
-  const s = ct.toString();
-  return s.substring(0, s.indexOf("."));
-}
-
-function htmlTimeToCivilTime(s: string) {
-  return CivilTime.fromString(s + ":00.000000000");
-}
-
 export function TimePicker({
   defaultValue,
-  readOnly,
   value,
-  disabled = false,
-  invalid = false,
-  size,
   onChange,
+  ...params
 }: TimePickerProps) {
-  const wrapperClasses = classnames(styles.wrapper, size && styles[size], {
-    [styles.disabled]: disabled,
-    [styles.invalid]: invalid,
-  });
+  const inputTime = React.createRef<HTMLInputElement>();
 
-  interface InternalProps {
-    defaultValue?: string;
-    disabled?: boolean;
-    value?: string;
-    readOnly?: boolean;
-    onChange?(event: ChangeEvent<HTMLInputElement>): void;
-  }
-
-  let timeProps: InternalProps = {
-    disabled,
-    readOnly,
+  const handleChange = (newValue: string) => {
+    onChange && onChange(htmlTimeToCivilTime(newValue));
   };
 
-  if (onChange) {
-    timeProps.onChange = (event: ChangeEvent<HTMLInputElement>) => {
-      onChange(htmlTimeToCivilTime(event.currentTarget.value));
-    };
-  }
+  // useLayoutEffect(() => {
+  //   if (!supportsTime) {
+  //     const input = inputTime.current;
 
-  if (defaultValue) {
-    timeProps.defaultValue = civilTimeToHTMLTime(defaultValue);
-  }
+  //     if (input) {
+  //       new TimePolyfill(input);
 
-  if (value) {
-    timeProps.value = civilTimeToHTMLTime(value);
-  }
+  //       input.addEventListener("change", (event: Event) => {
+  //         const value = (event.currentTarget as HTMLInputElement).dataset.value;
 
-  return (
-    <div className={wrapperClasses}>
-      <input className={styles.input} type="time" {...timeProps} />
-    </div>
-  );
+  //         if (value) {
+  //           handleChange(value);
+  //         }
+  //       });
+  //     }
+  //   }
+  // });
+
+  const fieldProps: FormFieldProps = {
+    onChange: handleChange,
+    defaultValue:
+      defaultValue != undefined ? civilTimeToHTMLTime(defaultValue) : undefined,
+    value: value != undefined ? civilTimeToHTMLTime(value) : undefined,
+    ...params,
+  };
+
+  return <FormField ref={inputTime} type={"time"} {...fieldProps} />;
+}
+
+function civilTimeToHTMLTime(civilTime: CivilTime) {
+  const timeString = civilTime.toString();
+  return timeString.substring(0, timeString.indexOf("."));
+}
+
+function htmlTimeToCivilTime(timeString: string) {
+  return CivilTime.fromString(timeString + ":00.000000000");
 }
