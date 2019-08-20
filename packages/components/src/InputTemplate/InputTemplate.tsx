@@ -1,4 +1,4 @@
-import React, { ReactNode, useState } from "react";
+import React, { useEffect, useState } from "react";
 import classnames from "classnames";
 import {
   CompositeDecorator,
@@ -7,34 +7,25 @@ import {
   Editor,
   EditorState,
   Modifier,
-  genKey,
+  // genKey,
 } from "draft-js";
 import styles from "./InputTemplate.css";
 
-const VARIABLE_REGEX = /\{\{[ ]*([\w]+)[ ]*\}\}/;
+interface VariableDefinition {
+  name: string;
+  label: string;
+  sample: string;
+}
 
-function variableStrategy(
+const availableVariables: VariableDefinition[] = [
+  { name: "NAME", label: "Name", sample: "Darryl" },
+];
+
+function findVariableEntities(
   contentBlock: ContentBlock,
   callback: (start: number, end: number) => void,
   contentState: ContentState,
 ) {
-  findWithRegex(new RegExp(VARIABLE_REGEX.source, "g"), contentBlock, callback);
-}
-
-function findWithRegex(
-  regex: RegExp,
-  contentBlock: ContentBlock,
-  callback: (start: number, end: number) => void,
-) {
-  const text = contentBlock.getText();
-  let matchArr, start;
-  while ((matchArr = regex.exec(text)) !== null) {
-    start = matchArr.index;
-    callback(start, start + matchArr[0].length);
-  }
-}
-
-function findVariableEntities(contentBlock, callback, contentState) {
   contentBlock.findEntityRanges(character => {
     const entityKey = character.getEntity();
     return (
@@ -48,52 +39,83 @@ interface InputTemplateProps {
   /**
    * Text to display.
    */
-  readonly text: string;
+  readonly value: string;
+  onChange?(newText: string): void;
 }
 
-export function InputTemplate({ text }: InputTemplateProps) {
+export function InputTemplate({ value, onChange }: InputTemplateProps) {
+  const className = classnames(styles.inputTemplate, {});
   const [editorState, setEditorState] = useState(
     EditorState.createWithContent(
       // ContentState.createFromBlockArray([
       //   new ContentBlock({ key: genKey(), text: "foo", type: "unstyled" }),
       //   new ContentBlock({ key: genKey(), text: "bar", type: "unstyled" }),
       // ]),
-      ContentState.createFromText(`foo bar tim ${text}`),
+      ContentState.createFromText(value),
       new CompositeDecorator([
         { strategy: findVariableEntities, component: VariableSpan },
-        { strategy: variableStrategy, component: VariableSpan },
       ]),
     ),
   );
 
-  const className = classnames(styles.inputTemplate, {});
+  useEffect(() => {
+    setEditorState(
+      EditorState.createWithContent(
+        // ContentState.createFromBlockArray([
+        //   new ContentBlock({ key: genKey(), text: "foo", type: "unstyled" }),
+        //   new ContentBlock({ key: genKey(), text: "bar", type: "unstyled" }),
+        // ]),
+        ContentState.createFromText(value),
+        new CompositeDecorator([
+          { strategy: findVariableEntities, component: VariableSpan },
+        ]),
+      ),
+    );
+  }, [value]);
 
   return (
-    <div className={className}>
-      <Editor editorState={editorState} onChange={setEditorState} />
-      <a onClick={handleClick}>Clickme</a>
-    </div>
+    <>
+      <div className={className}>
+        <Editor editorState={editorState} onChange={handleChange} />
+        <a onClick={handleClick}>Insert</a>
+      </div>
+      <pre>
+        {editorState
+          .getCurrentContent()
+          .getBlocksAsArray()
+          .map(block => block.getText())
+          .join("\n")}
+      </pre>
+    </>
   );
 
+  function handleChange(newEditorState: EditorState) {
+    setEditorState(newEditorState);
+
+    onChange &&
+      onChange(
+        editorState
+          .getCurrentContent()
+          .getBlocksAsArray()
+          .map(block => block.getText())
+          .join("\n"),
+      );
+  }
+
   function handleClick() {
+    const variable = availableVariables[0];
     const contentState = editorState.getCurrentContent();
     const contentStateWithEntity = contentState.createEntity(
       "VARIABLE",
       "IMMUTABLE",
-      { name: "Name" },
+      variable,
     );
     const entityKey = contentStateWithEntity.getLastCreatedEntityKey();
-
-    // const contentStateWithVariable = Modifier.applyEntity(
-    //   contentStateWithEntity,
-    //   editorState.getSelection(),
-    //   entityKey,
-    // );
 
     const contentStateWithVariable = Modifier.insertText(
       contentStateWithEntity,
       editorState.getSelection(),
-      "Customer Name",
+      `{{ ${variable.name} }}`,
       undefined,
       entityKey,
     );
@@ -108,19 +130,20 @@ export function InputTemplate({ text }: InputTemplateProps) {
 }
 
 interface VariableSpanProps {
-  contentState: any;
-  entityKey: any;
-  children: any;
+  contentState: ContentState;
+  entityKey: string;
 }
 
 function VariableSpan(props: VariableSpanProps) {
-  // const { name } = props.contentState.getEntity(props.entityKey).getData();
+  const { name, label, sample } = props.contentState
+    .getEntity(props.entityKey)
+    .getData() as VariableDefinition;
   const className = classnames(styles.variable);
 
   return (
     <span contentEditable={false} className={className}>
       <span className={styles.variableDelimiter}>{"{{"}</span>
-      {props.children}
+      {label}
       <span className={styles.variableDelimiter}>{"}}"}</span>
     </span>
   );

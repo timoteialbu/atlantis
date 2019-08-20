@@ -6,6 +6,8 @@ route: /components/input-template
 
 import { Playground, Props } from "docz";
 import { ComponentStatus } from "@jobber/docx";
+import { useState } from "react";
+import { Button } from "../Button";
 import { InputTemplate } from ".";
 
 # InputTemplate
@@ -17,11 +19,28 @@ In Jobber a InputTemplate is used to …
 ## Simple Example
 
 <Playground>
-  <InputTemplate text="Bob" />
-</Playground>
+  {() => {
+    const initial =
+      "Yo {{ NAME }},\n\nThank you for your Biz! We made poor use of the money.\n\nLove,\nBusiness";
 
-<Playground>
-  <InputTemplate text="Bob" loud />
+    const [text, setText] = useState(initial);
+
+    return <>
+      <InputTemplate value={text} onChange={handleChange} />
+      <Button label="Reset" onClick={resetText} />
+    </>;
+
+    function handleChange(newText) {
+      console.log("handleChange");
+      setText(newText);
+    }
+
+    function resetText() {
+      setText(initial);
+    }
+
+}}
+
 </Playground>
 
 ## InputTemplate Properties
