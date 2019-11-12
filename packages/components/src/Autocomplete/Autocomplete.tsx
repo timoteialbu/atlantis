@@ -26,6 +26,8 @@ interface AutocompleteProps {
    */
   onChange(newValue?: Option): void;
 
+  onKeyDown(event: React.KeyboardEvent<HTMLInputElement>): void;
+
   /**
    * Called as the user types in the input. The autocomplete will display what
    * is retuned from this method to the user as available options.
@@ -34,15 +36,23 @@ interface AutocompleteProps {
   getOptions(newInputText: string): Option[] | Promise<Option[]>;
 }
 
+// Design decision: component should call the function to return results
+// or should it just display results? Should the calling be a layer on top
+// of Autocomplete?
+
 export function Autocomplete({
-  initialOptions = [],
+  initialOptions = [
+    { label: "foo", value: "FOO" },
+    { label: "bar", value: "BAR" },
+  ],
   value,
   onChange,
+  onKeyDown,
   getOptions,
   placeholder,
 }: AutocompleteProps) {
   const [options, setOptions] = useState(initialOptions);
-  const [menuVisible, setMenuVisible] = useState(false);
+  const [menuVisible, setMenuVisible] = useState(true);
   const [inputText, setInputText] = useState((value && value.label) || "");
 
   useEffect(() => {
@@ -53,21 +63,27 @@ export function Autocomplete({
     }
   }, [value]);
 
+  const handleKeyDown = (event: React.KeyboardEvent<HTMLDivElement>) => {
+    console.log(event.key);
+    console.log(event.keyCode);
+    console.log(event.which);
+  };
+
   return (
-    <div className={styles.autocomplete}>
-      <InputText
-        value={inputText}
-        onChange={handleInputChange}
-        placeholder={placeholder}
-        onFocus={handleInputFocus}
-        onBlur={handleInputBlur}
-      />
-      <Menu
-        visible={menuVisible}
-        options={options}
-        selectedOption={value}
-        onOptionSelect={handleMenuChange}
-      />
+    <div
+      role="combobox"
+      onKeyDown={handleKeyDown}
+      className={styles.autocomplete}
+    >
+      <input type="text" placeholder="foo" />
+      {/* <InputText
+      // value={inputText}
+      // onChange={handleInputChange}
+      // placeholder={placeholder}
+      // onFocus={handleInputFocus}
+      // onBlur={handleInputBlur}
+      /> */}
+      <Menu options={options} />
     </div>
   );
 
@@ -102,3 +118,58 @@ export function Autocomplete({
     setMenuVisible(true);
   }
 }
+
+// TODO: control visibility from Autocomplete instead of Menu
+//   const optionMenuClass = classnames(styles.options, {
+//   [styles.visible]: visible,
+// });
+
+// keyboard nav code from Menu
+
+// import useEventListener from "@use-it/event-listener";
+
+// enum IndexChange {
+//   Previous = -1,
+//   Next = 1,
+// }
+
+// function setupKeyListeners() {
+//   useOnKeyDown("ArrowDown", (event: KeyboardEvent) => {
+//     if (!visible) return;
+
+//     event.preventDefault();
+//     setHighlightedIndex(
+//       Math.min(options.length - 1, highlightedIndex + IndexChange.Next),
+//     );
+//   });
+
+//   useOnKeyDown("ArrowUp", (event: KeyboardEvent) => {
+//     if (!visible) return;
+
+//     event.preventDefault();
+//     setHighlightedIndex(Math.max(0, highlightedIndex + IndexChange.Previous));
+//   });
+
+//   useOnKeyDown("Enter", (event: KeyboardEvent) => {
+//     if (!visible) return;
+
+//     event.preventDefault();
+//     onOptionSelect(options[highlightedIndex]);
+//   });
+// }
+// }
+
+// // Split this out into a hooks package.
+// function useOnKeyDown(
+// keyName: string,
+// handler: (event: KeyboardEvent) => boolean | void,
+// ) {
+// // Pending: https://github.com/donavon/use-event-listener/pull/12
+// // The types in useEventListener mistakenly require a SyntheticEvent for the passed generic.
+// // eslint-disable-next-line @typescript-eslint/ban-ts-ignore
+// //@ts-ignore
+// useEventListener<KeyboardEvent>("keydown", (event: KeyboardEvent) => {
+//   if (event.key === keyName) {
+//     handler(event);
+//   }
+// });
