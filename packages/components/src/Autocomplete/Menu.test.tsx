@@ -44,3 +44,7 @@ test("One Menu item can be selected", () => {
   expect(menu).toMatchSnapshot();
   // expect(first element) to be highlighted
 });
+
+test.todo(
+  "A Menu a _no options_ message when there input filters out all the options",
+);
