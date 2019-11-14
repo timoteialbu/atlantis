@@ -63,6 +63,8 @@ export function Autocomplete({
     }
   }, [value]);
 
+  // event.preventDefault stops the browser's default action from happening
+  // event.stopPropagation stops the event from going up to parent element
   const handleKeyDown = (event: React.KeyboardEvent<HTMLDivElement>) => {
     console.log(event.key);
     console.log(event.keyCode);
