@@ -1,3 +1,4 @@
+/* eslint-disable max-statements */
 import React, { useEffect, useState } from "react";
 import styles from "./Autocomplete.css";
 import { Menu } from "./Menu";
@@ -36,25 +37,32 @@ interface AutocompleteProps {
   getOptions(newInputText: string): Option[] | Promise<Option[]>;
 }
 
+function showMenu(options: Option[]) {
+  return options.length > 0;
+}
+
+enum IndexChange {
+  Previous = -1,
+  Next = 1,
+}
+
 // Design decision: component should call the function to return results
 // or should it just display results? Should the calling be a layer on top
 // of Autocomplete?
 
 export function Autocomplete({
-  initialOptions = [
-    { label: "foo", value: "FOO" },
-    { label: "bar", value: "BAR" },
-  ],
+  initialOptions = [],
   value,
   onChange,
-  onKeyDown,
   getOptions,
   placeholder,
 }: AutocompleteProps) {
   const [options, setOptions] = useState(initialOptions);
-  const [menuVisible, setMenuVisible] = useState(true);
+  const [menuVisible, setMenuVisible] = useState(false);
   const [inputText, setInputText] = useState((value && value.label) || "");
+  const [menuHighlightIndex, setMenuHighlightIndex] = useState(-1);
 
+  // Needed to make setting the value from the outside work.
   useEffect(() => {
     if (value) {
       updateInput(value.label);
@@ -63,12 +71,41 @@ export function Autocomplete({
     }
   }, [value]);
 
+  // Re-learned:
   // event.preventDefault stops the browser's default action from happening
   // event.stopPropagation stops the event from going up to parent element
   const handleKeyDown = (event: React.KeyboardEvent<HTMLDivElement>) => {
-    console.log(event.key);
-    console.log(event.keyCode);
-    console.log(event.which);
+    if (event.key == "ArrowDown") {
+      if (!showMenu(options) || !menuVisible) return;
+
+      event.preventDefault();
+      setMenuHighlightIndex(
+        Math.min(options.length - 1, menuHighlightIndex + IndexChange.Next),
+      );
+    }
+
+    if (event.key == "ArrowUp") {
+      if (!showMenu(options) || !menuVisible) return;
+
+      event.preventDefault();
+      setMenuHighlightIndex(
+        Math.max(0, menuHighlightIndex + IndexChange.Previous),
+      );
+    }
+
+    if (event.key == "Enter") {
+      if (!showMenu(options) || !menuVisible) return;
+
+      event.preventDefault();
+      handleMenuChange(options[menuHighlightIndex]);
+    }
+
+    if (event.key == "Escape") {
+      if (!showMenu(options) || !menuVisible) return;
+
+      event.preventDefault();
+      updateInput("");
+    }
   };
 
   return (
@@ -77,15 +114,17 @@ export function Autocomplete({
       onKeyDown={handleKeyDown}
       className={styles.autocomplete}
     >
-      <input type="text" placeholder="foo" />
-      {/* <InputText
-      // value={inputText}
-      // onChange={handleInputChange}
-      // placeholder={placeholder}
-      // onFocus={handleInputFocus}
-      // onBlur={handleInputBlur}
-      /> */}
-      <Menu options={options} />
+      <InputText
+        value={inputText}
+        onChange={handleInputChange}
+        placeholder={placeholder}
+        onFocus={handleInputFocus}
+        onBlur={handleInputBlur}
+      />
+
+      {showMenu(options) && menuVisible && (
+        <Menu options={options} highlightedIndex={menuHighlightIndex} />
+      )}
     </div>
   );
 
@@ -120,58 +159,3 @@ export function Autocomplete({
     setMenuVisible(true);
   }
 }
-
-// TODO: control visibility from Autocomplete instead of Menu
-//   const optionMenuClass = classnames(styles.options, {
-//   [styles.visible]: visible,
-// });
-
-// keyboard nav code from Menu
-
-// import useEventListener from "@use-it/event-listener";
-
-// enum IndexChange {
-//   Previous = -1,
-//   Next = 1,
-// }
-
-// function setupKeyListeners() {
-//   useOnKeyDown("ArrowDown", (event: KeyboardEvent) => {
-//     if (!visible) return;
-
-//     event.preventDefault();
-//     setHighlightedIndex(
-//       Math.min(options.length - 1, highlightedIndex + IndexChange.Next),
-//     );
-//   });
-
-//   useOnKeyDown("ArrowUp", (event: KeyboardEvent) => {
-//     if (!visible) return;
-
-//     event.preventDefault();
-//     setHighlightedIndex(Math.max(0, highlightedIndex + IndexChange.Previous));
-//   });
-
-//   useOnKeyDown("Enter", (event: KeyboardEvent) => {
-//     if (!visible) return;
-
-//     event.preventDefault();
-//     onOptionSelect(options[highlightedIndex]);
-//   });
-// }
-// }
-
-// // Split this out into a hooks package.
-// function useOnKeyDown(
-// keyName: string,
-// handler: (event: KeyboardEvent) => boolean | void,
-// ) {
-// // Pending: https://github.com/donavon/use-event-listener/pull/12
-// // The types in useEventListener mistakenly require a SyntheticEvent for the passed generic.
-// // eslint-disable-next-line @typescript-eslint/ban-ts-ignore
-// //@ts-ignore
-// useEventListener<KeyboardEvent>("keydown", (event: KeyboardEvent) => {
-//   if (event.key === keyName) {
-//     handler(event);
-//   }
-// });

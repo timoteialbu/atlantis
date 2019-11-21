@@ -17,26 +17,22 @@ interface MenuProps {
 
 export function Menu({ options, selectedIndex, highlightedIndex }: MenuProps) {
   const optionMenuClass = classnames(styles.options);
-
-  return (
-    <div className={optionMenuClass}>
-      {options.map((option, index) => {
-        const optionClass = classnames(styles.option, {
-          [styles.active]: index === highlightedIndex,
-        });
-        return (
-          <button className={optionClass} key={option.value}>
-            <div className={styles.icon}>
-              {isSelected(index, selectedIndex) && (
-                <Icon name="checkmark" size="small" />
-              )}
-            </div>
-            <div className={styles.text}>
-              <Text>{option.label}</Text>
-            </div>
-          </button>
-        );
-      })}
-    </div>
-  );
+  const optionElements = options.map((option, index) => {
+    const optionClass = classnames(styles.option, {
+      [styles.active]: index === highlightedIndex,
+    });
+    return (
+      <button className={optionClass} key={option.value}>
+        <div className={styles.icon}>
+          {isSelected(index, selectedIndex) && (
+            <Icon name="checkmark" size="small" />
+          )}
+        </div>
+        <div className={styles.text}>
+          <Text>{option.label}</Text>
+        </div>
+      </button>
+    );
+  });
+  return <div className={optionMenuClass}>{optionElements}</div>;
 }
