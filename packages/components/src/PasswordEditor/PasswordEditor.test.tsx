@@ -12,20 +12,20 @@ test.skip("renders", () => {
   expect(tree).toMatchSnapshot();
 });
 
-test.skip("renders with custom placeholder", () => {});
+test.skip("renders with custom input placeholder", () => {});
 
 test.skip("renders an error message when given an insecure value", () => {});
 
-test("it should call the handler with a new secure value", () => {
+test.skip("it should call the handler with a new secure value", () => {
   const changeHandler = jest.fn();
   const newPassword = "oh, look a password";
 
   const { getByLabelText } = render(
-    <PasswordEditor value="" onChange={changeHandler} />,
+    <PasswordEditor value="" onChange={changeHandler} />
   );
 
   fireEvent.change(getByLabelText("Password"), {
-    target: { value: newPassword },
+    target: { value: newPassword }
   });
   expect(changeHandler).toHaveBeenCalledWith([newPassword, true]);
 });
@@ -36,7 +36,7 @@ test("it should display an appropriate strength gauge", () => {
   const changeHandler = jest.fn();
 
   const { queryByLabelText } = render(
-    <PasswordEditor value="passwordBuddy" onChange={changeHandler} />,
+    <PasswordEditor value="passwordBuddy" onChange={changeHandler} />
   );
 
   expect(queryByLabelText("Level 0")).not.toBeInstanceOf(HTMLElement);
