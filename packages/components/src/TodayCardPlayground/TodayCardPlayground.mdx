@@ -1,0 +1,168 @@
+---
+name: TodayCardPlayground
+menu: Components
+route: /components/today-card-playground
+---
+
+import { Playground, Props } from "docz";
+import { ComponentStatus } from "@jobber/docx";
+import { TodayCardPlayground } from ".";
+import { Card } from "../Card";
+import { List } from "../List";
+import { Emphasis } from "../Emphasis";
+import { Heading } from "../Heading";
+import { Text } from "../Text";
+import { Content } from "../Content";
+import { DescriptionList } from "../DescriptionList";
+import { Icon } from "../Icon";
+import {
+  Table,
+  Header,
+  Footer,
+  Row,
+  Cell,
+  CellCurrency,
+  CellNumeric
+} from "../Table";
+
+# Today Card Playground
+
+<ComponentStatus stage="pre" responsive="no" accessible="no" />
+
+Write a description about what TodayCardPlayground component is trying to
+achieve.
+
+```ts
+import { TodayCardPlayground } from "@jobber/components/TodayCardPlayground";
+```
+
+<Playground>
+  <Card title="Today">
+    <Content>
+      <Table>
+        <Header>
+          <Cell/>
+          <Cell>Visits</Cell>
+          <Cell>Timesheet</Cell>
+        </Header>
+          <Row>
+            <Cell>
+              <Icon name="user" size="large" />
+            </Cell>
+            <Cell>
+              <Text><Emphasis variation="bold">2</Emphasis> Assigned</Text>
+              <Text><Emphasis variation="bold">4</Emphasis> Completed</Text>
+            </Cell>
+            <Cell>
+              <Icon name="timer" /> 2:00
+            </Cell>
+          </Row>
+        <Row>
+          <Cell>
+            <Icon name="user" size="large" />
+          </Cell>
+          <Cell>
+            2 Assigned<br/>
+            4 Completed
+          </Cell>
+          <Cell>
+            <Icon name="timer" /> 2:00
+          </Cell>
+        </Row>
+        <Row>
+          <Cell>
+            <Icon name="user" size="large" />
+          </Cell>
+          <Cell>
+
+          </Cell>
+          <Cell>
+            <Icon name="timer" /> 2:00
+          </Cell>
+        </Row>
+        <Row>
+          <Cell>
+            <Icon name="user" size="large" />
+          </Cell>
+          <Cell>
+            2 of 4 Completed
+          </Cell>
+          <Cell>
+            <Icon name="timer" /> 2:00
+          </Cell>
+        </Row>
+        <Footer>
+          <Cell>Total</Cell>
+          <Cell>
+            <div>
+              <Text><Emphasis variation="bold">8</Emphasis> Assigned</Text>
+              <Text><Emphasis variation="bold">16</Emphasis>  Completed</Text>
+            </div>
+          </Cell>
+          <Cell>
+            <Icon name="timer" /> 8:00
+          </Cell>
+        </Footer>
+      </Table>
+    </Content>
+
+  </Card>
+  <br/>
+  <Card title="Recommended Actions">
+          <List items={[
+        {
+          id: 1,
+          icon: "request",
+          content: "Review requests",
+          onClick: () => alert("TODO: Implement onClick")
+        },
+        {
+          id: 2,
+          icon: "checkmark",
+          content: "There are no quotes to respond to",
+          onClick: () => alert("TODO: Implement onClick")
+        },
+        {
+          id: 3,
+          icon: "job",
+          content: "Review jobs with action required",
+          onClick: () => alert("TODO: Implement onClick")
+        },
+        {
+          id: 4,
+          icon: "invoice",
+          content: "Batch invoice completed jobs",
+          onClick: () => alert("TODO: Implement onClick")
+        },
+        {
+          id: 5,
+          icon: "checkmark",
+          content: "There are no late invoices to follow up on",
+          onClick: () => alert("TODO: Implement onClick")
+        },
+
+      ]} />
+
+  </Card>
+</Playground>
+
+## Props
+
+<Props of={TodayCardPlayground} />
+
+---
+
+<!--
+  It is not necessary to provide an example of each prop. Use usage examples to
+  highlight key features of a component or particular considerations.
+
+  See `Button.mdx` for a good example of this.
+-->
+
+## Loud
+
+Use `loud` to indicate that a component is yelling.
+
+<Playground>
+  <TodayCardPlayground text="Fred" loud={true} />
+</Playground>
