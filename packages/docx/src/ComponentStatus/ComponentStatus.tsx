@@ -20,6 +20,10 @@ const status: { [status: string]: { [stage: string]: StatusData } } = {
       text: "Ready",
       status: "pass",
     },
+    deprecated: {
+      text: "Deprecated",
+      status: "warn",
+    },
   },
   responsive: {
     no: {
@@ -52,7 +56,7 @@ const status: { [status: string]: { [stage: string]: StatusData } } = {
 };
 
 interface ComponentStatusProps {
-  readonly stage: "pre" | "rc" | "ready";
+  readonly stage: "pre" | "rc" | "ready" | "deprecated";
   readonly responsive: "no" | "partial" | "yes";
   readonly accessible: "no" | "partial" | "yes";
 }
