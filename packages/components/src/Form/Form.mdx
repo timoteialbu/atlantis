@@ -6,7 +6,7 @@ showDirectoryLink: true
 ---
 
 import { Playground, Props } from "docz";
-import { useRef } from "react";
+import { useRef, useState } from "react";
 import { ComponentStatus } from "@jobber/docx";
 import { useFormState } from "@jobber/hooks";
 import { Form } from "@jobber/components/Form";
@@ -32,6 +32,8 @@ import { Form } from "@jobber/components/Form";
 <Playground>
   {() => {
     const [{ isDirty, isValid }, setFormState] = useFormState();
+    const [first, setFirst] = useState("");
+    const [last, setLast] = useState("");
     return (
       <Form
         onSubmit={() => alert("Submitted 🎉🎉🎉")}
@@ -41,6 +43,8 @@ import { Form } from "@jobber/components/Form";
           <InputText
             placeholder="First Name"
             name="firstName"
+            value={first}
+            onChange={setFirst}
             validations={{
               required: {
                 value: true,
@@ -55,6 +59,8 @@ import { Form } from "@jobber/components/Form";
           <InputText
             placeholder="Last Name"
             name="lastName"
+            value={last}
+            onChange={setLast}
             validations={{
               required: {
                 value: true,
