@@ -6,15 +6,20 @@ route: /border-radius
 
 # Border Radius
 
-We favour a subtle rounding of corners wherever possible as a nod to the blunt
-visual style of our marketing properties to afford a smoother transition from
-the signup flow into the product. To achieve this appearance, use
-`--radius-base`.
-
-This base radius can be found in almost all of our components that have a
-defined "edge": [Button](/components/button), [Card](/components/Card),
-[InputText](/components/input-text), and [Menu](/components/menu) are all
+Our `--radius-base` value translates to `2px` at initial browser scaling and
+should be the default choice whenever rounding corners in Jobber. We maintain
+this radius for corners on almost all of our components.
+[Button](/components/button), [Card](/components/Card),
+[InputText](/components/input-text), and [Menu](/components/menu) are a few
 examples of this in practice.
+
+Jobber's [marketing site](https://getjobber.com/) uses "sharp" corners with no
+rounding as a brand differentiation tactic. This is suitable for a web property
+that does not require heavy repeated use, but we use a slight radius on corners
+in our software based on research indicating that cognitive and visual strain is
+[reduced by rounding corners](/#References). This allows us to maintain a
+reasonably smooth transition from the marketing-to-software journey while
+optimizing the visual design for repetitive usage.
 
 Larger rounded corners should be used sparingly, but are available for cases
 where the user may expect a smoother corner, such as
@@ -38,3 +43,7 @@ export function Example({ of: radius }) {
 | `--radius-large`  | <Example of="large" />  |
 | `--radius-larger` | <Example of="larger" /> |
 | `--radius-circle` | <Example of="circle" /> |
+
+## References
+
+- [NeuralCorellate Paper](http://macknik.neuralcorrelate.com/pdf/articles/troncoso_et_al_Art_and_Perception_chapter.pdf)
