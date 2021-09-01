@@ -39,7 +39,12 @@ function Color({ color }: ColorProps) {
     <div className={styles.color}>
       <div key={color} style={style} className={styles.swatch}>
         <div className={styles.button}>
-          <Button size="small" icon="copy" onClick={handleClick} />
+          <Button
+            size="small"
+            type="tertiary"
+            icon="copy"
+            onClick={handleClick}
+          />
         </div>
       </div>
       <pre className={styles.pre}>{color}</pre>
