@@ -1,4 +1,4 @@
-import React, { JSXElementConstructor, ReactElement } from "react";
+import React, { ReactElement } from "react";
 import classnames from "classnames";
 import styles from "./ComponentProp.css";
 
@@ -13,7 +13,7 @@ interface ComponentPropProps {
    * Click handler.
    */
   onClick?(): void;
-  thing: ReactElement<ChildProps> | JSXElementConstructor<typeof CorrectChild>;
+  thing: ReactElement<ChildProps>;
 }
 
 interface ChildProps {
