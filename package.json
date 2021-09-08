@@ -67,6 +67,7 @@
     "glob": "^7.1.4",
     "husky": "^2.4.1",
     "identity-obj-proxy": "^3.0.0",
+    "inquirer": "^8.1.2",
     "jest": "^26.0.1",
     "jest-junit": "^6.4.0",
     "lerna": "^3.20.2",
