@@ -1,8 +1,8 @@
 /* eslint-disable import/no-default-export */
-import multiInput from "rollup-plugin-multi-input";
 import typescript from "rollup-plugin-typescript2";
 import postcss from "rollup-plugin-postcss";
 import commonjs from "rollup-plugin-commonjs";
+import multiInput from "rollup-plugin-multi-input";
 
 export default {
   input: [`src/*/index.ts`, `../hooks/*/index.ts`],
