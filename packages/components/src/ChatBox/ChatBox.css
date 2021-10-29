@@ -1,0 +1,30 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  width: 320px;
+  border: 1px solid black;
+}
+
+.messages {
+  display: flex;
+  flex-direction: column-reverse;
+  height: 200px;
+  overflow: auto;
+}
+
+.chatBubble {
+  margin: 2px 16px;
+}
+
+.inputHolder {
+  /*   position: sticky;
+  bottom: 0; */
+  padding: 4px 16px;
+  border-top: 1px solid rgb(224, 224, 224);
+  background-color: rgb(255, 255, 255);
+}
+
+textarea {
+  display: block;
+  width: 100%;
+}
