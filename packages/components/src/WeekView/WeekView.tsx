@@ -3,6 +3,7 @@ import classnames from "classnames";
 import styles from "./WeekView.css";
 import { Text } from "../Text";
 import { Typography } from "../Typography";
+import { Pill } from "../Pill";
 
 // interface WeekViewProps {}
 
@@ -39,10 +40,19 @@ export function WeekView() {
       </div>
 
       <div className={styles.grid}>
-        <div className="event event1 calendar1">Event 1</div>
-        <div className="event event2 calendar2">Event 2</div>
-        <div className="event event3 calendar2">Event 3</div>
-        <div className="event event4 calendar1">Event 4</div>
+        {Array.from(Array(10).keys()).map(i => (
+          <div
+            className={styles.col}
+            key={i}
+            style={{
+              ...(i == 0 && { gridColumn: "1/span 2" }),
+              ...(i == 2 && { gridColumn: "2/span 2" }),
+              ...(i == 6 && { gridColumn: "4/span 3" }),
+            }}
+          >
+            <Pill content={`Event ${i}`} />
+          </div>
+        ))}
       </div>
     </div>
   );

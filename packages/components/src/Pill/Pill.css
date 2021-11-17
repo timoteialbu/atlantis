@@ -1,8 +1,10 @@
 .pill {
   --accent: var(--color-border);
-  --background: var(--color-border-surface);
+  --background: var(--color-surface);
+  display: block;
 
   position: relative;
+  width: 100%;
   padding: var(--space-smaller) var(--space-small);
   border: 1px solid var(--accent);
   border-left-width: 4px;
