@@ -1,0 +1,25 @@
+.pill {
+  --accent: var(--color-border);
+  --background: var(--color-border-surface);
+
+  position: relative;
+  padding: var(--space-smaller) var(--space-small);
+  border: 1px solid var(--accent);
+  border-left-width: 4px;
+  border-radius: var(--radius-base);
+  overflow: hidden;
+  text-align: left;
+  background-color: var(--background);
+  cursor: pointer;
+  appearance: none;
+}
+
+.pill:hover {
+  text-decoration: none;
+  background-color: var(--color-surface--hover);
+}
+
+.completed {
+  text-decoration: line-through;
+  background-color: var(--color-surface--background);
+}
