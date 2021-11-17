@@ -1,16 +1,17 @@
 import React from "react";
 import classnames from "classnames";
 import styles from "./WeekView.css";
+import { WeekViewEvent, WeekViewEventProps } from "./WeekViewEvent";
 import { Typography } from "../Typography";
-import { Pill } from "../Pill";
 import { Avatar } from "../Avatar";
 import { Text } from "../Text";
 
 interface WeekViewProps {
   readonly showHeader?: boolean;
+  readonly events?: WeekViewEventProps[];
 }
 
-export function WeekView({ showHeader = false }: WeekViewProps) {
+export function WeekView({ showHeader = false, events }: WeekViewProps) {
   return (
     <div className={styles.container}>
       <div className={styles.sideBar}>
@@ -21,11 +22,11 @@ export function WeekView({ showHeader = false }: WeekViewProps) {
       </div>
       <div className={styles.calendar}>
         <div className={classnames(styles.grid, styles.background)}>
-          {weekDates().map((_, i) => (
+          {weekDates().map((date, i) => (
             <div
               key={i}
               className={classnames(styles.col, {
-                [styles.today]: isToday(i),
+                [styles.today]: isToday(date),
               })}
             />
           ))}
@@ -55,28 +56,20 @@ export function WeekView({ showHeader = false }: WeekViewProps) {
           </div>
         )}
 
-        <div className={styles.grid}>
-          {Array.from(Array(10).keys()).map(i => (
-            <div
-              className={styles.col}
-              key={i}
-              style={{
-                ...(i == 0 && { gridColumn: "1/span 2" }),
-                ...(i == 2 && { gridColumn: "2/span 2" }),
-                ...(i == 6 && { gridColumn: "4/span 3" }),
-              }}
-            >
-              <Pill content={`Event ${i}`} />
-            </div>
-          ))}
-        </div>
+        {events && (
+          <div className={styles.grid}>
+            {events.map((event, i) => (
+              <WeekViewEvent key={i} {...event} />
+            ))}
+          </div>
+        )}
       </div>
     </div>
   );
 
-  function isToday(dayOfTheWeek: number) {
+  function isToday(date: Date) {
     const today = new Date();
-    return today.getDay() === dayOfTheWeek;
+    return today.setHours(0, 0, 0, 0) === date.setHours(0, 0, 0, 0);
   }
 
   function weekDates() {

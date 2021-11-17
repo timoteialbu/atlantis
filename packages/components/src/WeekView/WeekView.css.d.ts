@@ -5,6 +5,7 @@ declare const styles: {
   readonly "calendar": string;
   readonly "grid": string;
   readonly "col": string;
+  readonly "event": string;
   readonly "background": string;
   readonly "day": string;
   readonly "today": string;

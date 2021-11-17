@@ -3,7 +3,7 @@ import classnames from "classnames";
 import styles from "./Pill.css";
 import { Typography } from "../Typography";
 
-interface PillProps {
+export interface PillProps {
   /**
    * Time to display.
    */
@@ -42,7 +42,7 @@ export function Pill({
 
   return (
     <button className={className} style={style} onClick={onClick}>
-      <Typography element="span" numberOfLines={2}>
+      <Typography element="span" numberOfLines={1}>
         {/* TODO: Calculate text color based on background */}
         {time && (
           <Typography

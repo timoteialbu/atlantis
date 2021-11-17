@@ -1,6 +1,6 @@
 .container {
   display: grid;
-  grid-template-columns: 200px 1fr;
+  grid-template-columns: 150px 1fr;
 }
 
 .sideBar {
@@ -30,7 +30,8 @@
   grid-auto-flow: dense;
 }
 
-.col {
+.col,
+.event {
   margin: var(--space-smaller);
   margin-top: 0;
 }
@@ -62,4 +63,8 @@
 
 .today {
   background-color: var(--color-surface--hover);
+}
+
+.event {
+  grid-column: var(--grid-column) / span var(--grid-span);
 }
