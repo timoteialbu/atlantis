@@ -1,13 +1,30 @@
+.container {
+  display: grid;
+  grid-template-columns: 200px 1fr;
+}
+
+.sideBar {
+  padding: var(--space-small);
+  border: 1px solid var(--color-border);
+  background-color: var(--color-surface--background);
+}
+
+.userName {
+  display: grid;
+  grid-template-columns: max-content auto;
+  grid-gap: var(--space-small);
+  align-items: center;
+}
+
 .calendar {
   position: relative;
-  min-height: 200px;
   border: 1px solid var(--color-border);
-  border-top: 0;
 }
 
 .grid {
   display: grid;
   position: relative;
+  padding: var(--space-small) 0;
   text-align: center;
   grid-template-columns: repeat(7, 1fr);
   grid-auto-flow: dense;
@@ -22,6 +39,7 @@
   position: absolute;
   width: 100%;
   height: 100%;
+  padding: 0;
   background: var(--color-white);
 }
 
@@ -36,5 +54,5 @@
 }
 
 .day {
-  margin: var(--space-small) 0;
+  margin-top: var(--space-small);
 }

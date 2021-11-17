@@ -4,7 +4,7 @@ import { WeekView } from ".";
 export function Test() {
   return (
     <>
-      <WeekView />
+      <WeekView showHeader={true} />
       <WeekView />
     </>
   );
