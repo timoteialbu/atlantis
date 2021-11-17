@@ -54,5 +54,12 @@
 }
 
 .day {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-smaller);
   margin-top: var(--space-small);
+}
+
+.today {
+  background-color: var(--color-surface--hover);
 }

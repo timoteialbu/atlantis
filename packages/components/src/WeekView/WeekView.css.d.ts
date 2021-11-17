@@ -7,6 +7,7 @@ declare const styles: {
   readonly "col": string;
   readonly "background": string;
   readonly "day": string;
+  readonly "today": string;
 };
 export = styles;
 
