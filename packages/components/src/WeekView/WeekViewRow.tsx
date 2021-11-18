@@ -3,41 +3,21 @@ import classnames from "classnames";
 import styles from "./WeekView.css";
 import { WeekViewEvent, WeekViewEventProps } from "./WeekViewEvent";
 import { Typography } from "../Typography";
-import { AvatarProps } from "../Avatar";
-
-export interface UserInfo {
-  readonly avatar?: ReactElement<AvatarProps>;
-  readonly name: string;
-}
 
 interface WeekViewRowProps {
   readonly showDayHeader?: boolean;
-  readonly userInfo?: UserInfo;
+  readonly sidebar?: ReactElement;
   readonly events?: WeekViewEventProps[];
 }
 
 export function WeekViewRow({
   showDayHeader = false,
-  userInfo,
+  sidebar,
   events,
 }: WeekViewRowProps) {
   return (
     <div className={styles.container}>
-      <div className={styles.sideBar}>
-        {userInfo && (
-          <div className={styles.userName}>
-            {userInfo.avatar}
-            <Typography
-              size="small"
-              textColor="blue"
-              fontFamily="display"
-              fontWeight="bold"
-            >
-              {userInfo.name}
-            </Typography>
-          </div>
-        )}
-      </div>
+      <div className={styles.sideBar}>{sidebar}</div>
       <div className={styles.calendar}>
         <div className={classnames(styles.grid, styles.background)}>
           {weekDates().map((date, i) => (

@@ -8,11 +8,11 @@ export function Test() {
     <WeekView
       data={[
         {
-          userInfo: { avatar: <Avatar initials="DT" />, name: "Darryl Tec" },
+          user: { avatar: <Avatar initials="DT" />, name: "Darryl Tec" },
           events: randomizedDates(),
         },
         {
-          userInfo: { avatar: <Avatar initials="CM" />, name: "Chris Murray" },
+          user: { avatar: <Avatar initials="CM" />, name: "Chris Murray" },
           events: randomizedDates(),
         },
       ]}
