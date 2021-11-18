@@ -69,3 +69,31 @@
 .event {
   grid-column: var(--grid-column) / span var(--grid-span);
 }
+
+.controls {
+  display: grid;
+  grid-template-areas:
+    "a a a"
+    "b c d";
+  grid-template-columns: max-content max-content 1fr;
+  grid-template-rows: 1fr 1fr;
+  grid-gap: var(--space-smaller);
+  align-items: center;
+  height: 100%;
+}
+
+.controls :first-child {
+  grid-area: a;
+}
+
+.controls :nth-child(2) {
+  grid-area: b;
+}
+
+.controls :nth-child(3) {
+  grid-area: c;
+}
+
+.controls :last-child {
+  grid-area: d;
+}

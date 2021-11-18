@@ -9,6 +9,7 @@ declare const styles: {
   readonly "background": string;
   readonly "day": string;
   readonly "today": string;
+  readonly "controls": string;
 };
 export = styles;
 
