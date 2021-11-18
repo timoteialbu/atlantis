@@ -23,6 +23,7 @@ export function WeekViewEvent(props: WeekViewEventProps) {
     </div>
   );
 
+  // TODO: Calculate with crossing week
   function calculatePosition() {
     return {
       "--grid-column": startAt.getDay() + 1,

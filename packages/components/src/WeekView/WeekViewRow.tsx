@@ -58,7 +58,7 @@ export function WeekViewRow({
 
         {events && (
           <div className={styles.grid}>
-            {events.map((event, i) => (
+            {filteredEvents().map((event, i) => (
               <WeekViewEvent key={i} {...event} />
             ))}
           </div>
@@ -70,5 +70,19 @@ export function WeekViewRow({
   function isToday(date: Date) {
     const today = new Date();
     return today.setHours(0, 0, 0, 0) === date.setHours(0, 0, 0, 0);
+  }
+
+  // TODO: fancy this up!
+  function filteredEvents() {
+    if (!events) return [];
+    return events.filter(event => {
+      const startAtWithinDateRange =
+        event.startAt >= weekDates[0] &&
+        event.startAt <= weekDates[weekDates.length - 1];
+      const endAtWithinDateRange =
+        event.endAt >= weekDates[0] &&
+        event.endAt <= weekDates[weekDates.length - 1];
+      return startAtWithinDateRange || endAtWithinDateRange;
+    });
   }
 }
