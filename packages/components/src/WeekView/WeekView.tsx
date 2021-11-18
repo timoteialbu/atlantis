@@ -5,8 +5,10 @@ import { WeekViewUser, WeekViewUserProps } from "./WeekViewUser";
 import { WeekViewControls } from "./WeekViewControls";
 
 export interface WeekViewData {
+  readonly id: string;
   readonly user: WeekViewUserProps;
   readonly events: WeekViewEventProps[];
+  onChange(weekId: string, eventId: string, newDate: Date): void;
 }
 
 interface WeekViewProps {
@@ -18,6 +20,7 @@ export function WeekView({ data }: WeekViewProps) {
   return (
     <>
       <WeekViewRow
+        id="header"
         sidebar={
           <WeekViewControls
             weekDates={weekDates()}

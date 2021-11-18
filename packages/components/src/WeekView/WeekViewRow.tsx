@@ -3,20 +3,25 @@ import classnames from "classnames";
 import { AnimatePresence } from "framer-motion";
 import styles from "./WeekView.css";
 import { WeekViewEvent, WeekViewEventProps } from "./WeekViewEvent";
+import { WeekViewDayColumn } from "./WeekViewDayColumn";
 import { Typography } from "../Typography";
 
 interface WeekViewRowProps {
+  readonly id: string;
   readonly showDayHeader?: boolean;
   readonly sidebar?: ReactElement;
   readonly events?: WeekViewEventProps[];
   readonly weekDates: Date[];
+  onChange?(weekId: string, eventId: string, newDate: Date): void;
 }
 
 export function WeekViewRow({
+  id,
   showDayHeader = false,
   weekDates,
   sidebar,
   events,
+  onChange,
 }: WeekViewRowProps) {
   return (
     <div className={styles.container}>
@@ -24,11 +29,10 @@ export function WeekViewRow({
       <div className={styles.calendar}>
         <div className={classnames(styles.grid, styles.background)}>
           {weekDates.map((date, i) => (
-            <div
+            <WeekViewDayColumn
               key={i}
-              className={classnames(styles.col, {
-                [styles.today]: isToday(date),
-              })}
+              date={date}
+              onEventDrop={handleEventDrop}
             />
           ))}
         </div>
@@ -70,11 +74,6 @@ export function WeekViewRow({
     </div>
   );
 
-  function isToday(date: Date) {
-    const today = new Date();
-    return today.setHours(0, 0, 0, 0) === date.setHours(0, 0, 0, 0);
-  }
-
   // TODO: fancy this up!
   function filteredEvents() {
     if (!events) return [];
@@ -87,5 +86,9 @@ export function WeekViewRow({
         event.endAt <= weekDates[weekDates.length - 1];
       return startAtWithinDateRange || endAtWithinDateRange;
     });
+  }
+
+  function handleEventDrop(eventId: string, newDate: Date) {
+    onChange && onChange(id, eventId, newDate);
   }
 }

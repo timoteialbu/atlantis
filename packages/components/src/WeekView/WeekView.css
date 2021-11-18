@@ -29,6 +29,11 @@
   text-align: center;
   grid-template-columns: repeat(7, 1fr);
   grid-auto-flow: dense;
+  pointer-events: none;
+}
+
+.grid > * {
+  pointer-events: all;
 }
 
 .col,
@@ -64,6 +69,10 @@
 
 .today {
   background-color: var(--color-surface--hover);
+}
+
+.active {
+  background-color: var(--color-surface--active);
 }
 
 .event {
