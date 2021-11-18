@@ -1,5 +1,6 @@
 import React, { ReactElement } from "react";
 import classnames from "classnames";
+import { AnimatePresence } from "framer-motion";
 import styles from "./WeekView.css";
 import { WeekViewEvent, WeekViewEventProps } from "./WeekViewEvent";
 import { Typography } from "../Typography";
@@ -58,9 +59,11 @@ export function WeekViewRow({
 
         {events && (
           <div className={styles.grid}>
-            {filteredEvents().map((event, i) => (
-              <WeekViewEvent key={i} {...event} />
-            ))}
+            <AnimatePresence>
+              {filteredEvents().map((event, i) => (
+                <WeekViewEvent key={i} {...event} delay={i} />
+              ))}
+            </AnimatePresence>
           </div>
         )}
       </div>
