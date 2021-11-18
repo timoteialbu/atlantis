@@ -11,12 +11,12 @@ export function WeekViewEvent(props: WeekViewEventProps) {
   const { startAt, endAt } = props;
 
   return (
-    <div className={styles.event} style={calculatePosition()}>
+    <div className={styles.event} style={calculatePosition()} draggable={true}>
       <Pill
         time={startAt.toLocaleTimeString(undefined, {
           hour12: true,
           minute: "2-digit",
-          hour: "numeric",
+          hour: "2-digit",
         })}
         {...props}
       />

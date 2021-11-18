@@ -1,14 +1,22 @@
 import { sortBy } from "lodash";
 import React from "react";
 import { WeekView } from ".";
+import { Avatar } from "../Avatar";
 
 export function Test() {
   return (
-    <>
-      <WeekView showHeader={true} />
-      <WeekView events={randomizedDates()} />
-      <WeekView events={randomizedDates()} />
-    </>
+    <WeekView
+      data={[
+        {
+          userInfo: { avatar: <Avatar initials="DT" />, name: "Darryl Tec" },
+          events: randomizedDates(),
+        },
+        {
+          userInfo: { avatar: <Avatar initials="CM" />, name: "Chris Murray" },
+          events: randomizedDates(),
+        },
+      ]}
+    />
   );
 
   function randomizedDates() {
