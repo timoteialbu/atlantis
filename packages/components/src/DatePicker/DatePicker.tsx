@@ -10,7 +10,10 @@ import "react-datepicker/dist/react-datepicker.css";
 import { XOR } from "ts-xor";
 import styles from "./DatePicker.css";
 import { DatePickerCustomHeader } from "./DatePickerCustomHeader";
-import { Button } from "../Button";
+import {
+  DatePickerActivator,
+  DatePickerActivatorProps,
+} from "./DatePickerActivator";
 
 interface BaseDatePickerProps {
   /**
@@ -28,7 +31,9 @@ interface DatePickerModalProps extends BaseDatePickerProps {
   /**
    * Use a custom activator to trigger the DatePicker
    */
-  readonly activator?: ReactElement;
+  readonly activator?:
+    | ReactElement
+    | ((props: DatePickerActivatorProps) => ReactElement);
 }
 
 interface DatePickerInlineProps extends BaseDatePickerProps {
@@ -58,18 +63,7 @@ export function DatePicker({
         inline={inline}
         onChange={handleChange}
         formatWeekDay={date => date.substr(0, 3)}
-        customInput={
-          activator ? (
-            activator
-          ) : (
-            <Button
-              variation="work"
-              type="tertiary"
-              icon="calendar"
-              ariaLabel="Open Datepicker"
-            />
-          )
-        }
+        customInput={<DatePickerActivator activator={activator} />}
         renderCustomHeader={props => <DatePickerCustomHeader {...props} />}
         onCalendarOpen={focusSelectedDate}
       />
@@ -87,7 +81,7 @@ export function DatePicker({
       datePickerRef.current?.querySelector(selectedDateClass);
 
     if (selectedDate instanceof HTMLDivElement) {
-      selectedDate.focus();
+      // selectedDate.focus();
     }
   }
 }
